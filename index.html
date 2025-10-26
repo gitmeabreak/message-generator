@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <!-- Updated viewport for better mobile and iOS compatibility -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rogers Message Generator</title>
+    <title>Rogers Message Generator (Protected)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,180 +19,260 @@
         .container {
             max-width: 800px;
         }
-        /* Removed custom styling for date input indicator for better iOS compatibility */
+        /* Ensure date input text contrast is good */
         input[type="date"] {
-            /* Ensure text contrast is good even when native picker is used */
             color-scheme: dark; 
         }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200 p-4 sm:p-8">
 
-<div class="container mx-auto p-4 sm:p-6 bg-gray-800 rounded-2xl shadow-xl">
-    <h1 class="text-3xl font-bold text-center text-white mb-6">Rogers Message Generator</h1>
-    <p class="text-center text-gray-400 mb-8">Fill out the details below to generate the custom text message.</p>
+<!-- Passcode Overlay -->
+<div id="passcodeOverlay" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/95 backdrop-blur-sm transition-opacity duration-500">
+    <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-sm border border-blue-600">
+        <h2 class="text-2xl font-bold text-white text-center mb-4">Access Required</h2>
+        <p class="text-gray-400 text-center mb-6">Enter the passcode to view the message generator.</p>
+        
+        <input type="password" id="passcodeInput" placeholder="Enter Passcode" class="w-full p-3 mb-4 rounded-lg bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+        
+        <p id="passcodeError" class="text-red-400 text-sm text-center mb-4 hidden">Incorrect passcode. Please try again.</p>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <!-- Customer Details -->
-        <div class="bg-gray-700 p-6 rounded-xl">
-            <h2 class="text-xl font-semibold mb-4 text-white">Customer & Order Details</h2>
-            <div class="mb-4">
-                <label for="customerName" class="block text-sm font-medium text-gray-300 mb-1">Customer Name</label>
-                <input type="text" id="customerName" placeholder="e.g., John Smith" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div class="mb-4">
-                <label for="yourName" class="block text-sm font-medium text-gray-300 mb-1">Your Name</label>
-                <input type="text" id="yourName" placeholder="e.g., Ming" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div class="mb-4">
-                <label for="referenceNumber" class="block text-sm font-medium text-gray-300 mb-1">Reference #</label>
-                <input type="text" id="referenceNumber" placeholder="e.g., 123456789" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div class="mb-4">
-                <label for="installDate" class="block text-sm font-medium text-gray-300 mb-1">Estimated Delivery/Install Date</label>
-                <input type="date" id="installDate" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div class="mb-4">
-                <label for="installType" class="block text-sm font-medium text-gray-300 mb-1">Installation Type</label>
-                <select id="installType" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="Express Setup">Express Setup</option>
-                    <option value="Professional Installation">Professional Installation</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Service Packages -->
-        <div class="bg-gray-700 p-6 rounded-xl">
-            <h2 class="text-xl font-semibold mb-4 text-white">Service Packages</h2>
-            <div class="mb-4">
-                <label for="internet" class="block text-sm font-medium text-gray-300 mb-1">Internet</label>
-                <select id="internet" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="1.5G Unlimited Internet">1.5G Unlimited Internet</option>
-                    <option value="2G Unlimited Internet">2G Unlimited Internet</option>
-                    <option value="2.5G Unlimited Internet">2.5G Unlimited Internet</option>
-                </select>
-            </div>
-            <div class="mb-4">
-                <label for="tv" class="block text-sm font-medium text-gray-300 mb-1">TV</label>
-                <select id="tv" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="No TV">No TV</option>
-                    <option value="appTV">appTV</option>
-                    <option value="appTV+streaming">appTV+streaming</option>
-                    <option value="appTV basic">appTV basic</option>
-                    <option value="appTV basic+streaming">appTV basic+streaming</option>
-                    <option value="Essential TV">Essential TV</option>
-                    <option value="Popular TV">Popular TV</option>
-                    <option value="Ultimate TV">Ultimate TV</option>
-                </select>
-            </div>
-            <div class="mb-4">
-                <label for="extraTvBoxes" class="block text-sm font-medium text-gray-300 mb-1">Extra TV Boxes</label>
-                <select id="extraTvBoxes" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </div>
-            <div class="mb-4">
-                <label for="homePhone" class="block text-sm font-medium text-gray-300 mb-1">Home Phone</label>
-                <select id="homePhone" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="No Home Phone">No Home Phone</option>
-                    <option value="Local Calling">Local Calling</option>
-                    <option value="Canada-wide Calling">Canada-wide Calling</option>
-                    <option value="International Calling">International Calling</option>
-                </select>
-            </div>
-             <div class="mb-4">
-                <label for="shmCameras" class="block text-sm font-medium text-gray-300 mb-1">SHM Camera(s)</label>
-                <select id="shmCameras" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </div>
-            <div class="mb-4">
-                <label for="shmSensors" class="block text-sm font-medium text-gray-300 mb-1">SHM Sensor(s)</label>
-                <select id="shmSensors" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </div>
-        </div>
+        <button id="passcodeSubmit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-transform transform hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+            Submit
+        </button>
     </div>
-    
-    <!-- Billing & Add-ons -->
-    <div class="bg-gray-700 p-6 rounded-xl mb-8">
-        <h2 class="text-xl font-semibold mb-4 text-white">Billing & Add-ons</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="mb-4">
-                <label for="paymentType" class="block text-sm font-medium text-gray-300 mb-1">Payment Type</label>
-                <select id="paymentType" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="Automatic">Automatic Payment</option>
-                    <option value="Manual">Manual Payment</option>
-                </select>
-            </div>
-            <div class="mb-4">
-                <label for="costBeforeTax" class="block text-sm font-medium text-gray-300 mb-1">Sub-total (before tax)</label>
-                <input type="text" id="costBeforeTax" placeholder="e.g., $75.00" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-        </div>
-        <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-300 mb-1">Additional Features</label>
-            <div class="flex flex-col space-y-2">
-                <div class="flex items-center">
-                    <input type="checkbox" id="crave" class="h-5 w-5 text-blue-600 bg-gray-600 border-gray-500 rounded focus:ring-blue-500">
-                    <label for="crave" class="ml-2 text-sm font-medium text-gray-300">Crave (2 months free)</label>
+</div>
+
+<!-- Main Content Wrapper - Content is initially hidden by the overlay -->
+<div id="mainContent" class="transition-opacity duration-500 opacity-0">
+    <div class="container mx-auto p-4 sm:p-6 bg-gray-800 rounded-2xl shadow-xl">
+        <h1 class="text-3xl font-bold text-center text-white mb-6">Rogers Message Generator</h1>
+        <p class="text-center text-gray-400 mb-8">Fill out the details below to generate the custom text message.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Customer Details -->
+            <div class="bg-gray-700 p-6 rounded-xl">
+                <h2 class="text-xl font-semibold mb-4 text-white">Customer & Order Details</h2>
+                <div class="mb-4">
+                    <label for="customerName" class="block text-sm font-medium text-gray-300 mb-1">Customer Name</label>
+                    <input type="text" id="customerName" placeholder="e.g., John Smith" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div class="flex items-center">
-                    <input type="checkbox" id="disney" class="h-5 w-5 text-blue-600 bg-gray-600 border-gray-500 rounded focus:ring-blue-500">
-                    <label for="disney" class="ml-2 text-sm font-medium text-gray-300">Disney+ Standard with Ads (24 months free)</label>
+                <div class="mb-4">
+                    <label for="yourName" class="block text-sm font-medium text-gray-300 mb-1">Your Name</label>
+                    <input type="text" id="yourName" placeholder="e.g., Ming" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label for="referenceNumber" class="block text-sm font-medium text-gray-300 mb-1">Reference #</label>
+                    <input type="text" id="referenceNumber" placeholder="e.g., 123456789" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label for="installDate" class="block text-sm font-medium text-gray-300 mb-1">Estimated Delivery/Install Date</label>
+                    <input type="date" id="installDate" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label for="installType" class="block text-sm font-medium text-gray-300 mb-1">Installation Type</label>
+                    <select id="installType" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Express Setup">Express Setup</option>
+                        <option value="Professional Installation">Professional Installation</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Service Packages -->
+            <div class="bg-gray-700 p-6 rounded-xl">
+                <h2 class="text-xl font-semibold mb-4 text-white">Service Packages</h2>
+                <div class="mb-4">
+                    <label for="internet" class="block text-sm font-medium text-gray-300 mb-1">Internet</label>
+                    <select id="internet" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="1.5G Unlimited Internet">1.5G Unlimited Internet</option>
+                        <option value="2G Unlimited Internet">2G Unlimited Internet</option>
+                        <option value="2.5G Unlimited Internet">2.5G Unlimited Internet</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="tv" class="block text-sm font-medium text-gray-300 mb-1">TV</label>
+                    <select id="tv" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="No TV">No TV</option>
+                        <option value="appTV">appTV</option>
+                        <option value="appTV+streaming">appTV+streaming</option>
+                        <option value="appTV basic">appTV basic</option>
+                        <option value="appTV basic+streaming">appTV basic+streaming</option>
+                        <option value="Essential TV">Essential TV</option>
+                        <option value="Popular TV">Popular TV</option>
+                        <option value="Ultimate TV">Ultimate TV</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="extraTvBoxes" class="block text-sm font-medium text-gray-300 mb-1">Extra TV Boxes</label>
+                    <select id="extraTvBoxes" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="homePhone" class="block text-sm font-medium text-gray-300 mb-1">Home Phone</label>
+                    <select id="homePhone" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="No Home Phone">No Home Phone</option>
+                        <option value="Local Calling">Local Calling</option>
+                        <option value="Canada-wide Calling">Canada-wide Calling</option>
+                        <option value="International Calling">International Calling</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="shmCameras" class="block text-sm font-medium text-gray-300 mb-1">SHM Camera(s)</label>
+                    <select id="shmCameras" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="shmSensors" class="block text-sm font-medium text-gray-300 mb-1">SHM Sensor(s)</label>
+                    <select id="shmSensors" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
                 </div>
             </div>
         </div>
-        <div class="mb-4">
-            <label for="channels" class="block text-sm font-medium text-gray-300 mb-1">Additional Channel(s) (comma separated)</label>
-            <input type="text" id="channels" placeholder="e.g., BNN Bloomberg" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+        
+        <!-- Billing & Add-ons -->
+        <div class="bg-gray-700 p-6 rounded-xl mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-white">Billing & Add-ons</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="mb-4">
+                    <label for="paymentType" class="block text-sm font-medium text-gray-300 mb-1">Payment Type</label>
+                    <select id="paymentType" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Automatic">Automatic Payment</option>
+                        <option value="Manual">Manual Payment</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="costBeforeTax" class="block text-sm font-medium text-gray-300 mb-1">Sub-total (before tax)</label>
+                    <input type="text" id="costBeforeTax" placeholder="e.g., $75.00" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-300 mb-1">Additional Features</label>
+                <div class="flex flex-col space-y-2">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="crave" class="h-5 w-5 text-blue-600 bg-gray-600 border-gray-500 rounded focus:ring-blue-500">
+                        <label for="crave" class="ml-2 text-sm font-medium text-gray-300">Crave (2 months free)</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="disney" class="h-5 w-5 text-blue-600 bg-gray-600 border-gray-500 rounded focus:ring-blue-500">
+                        <label for="disney" class="ml-2 text-sm font-medium text-gray-300">Disney+ Standard with Ads (24 months free)</label>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label for="channels" class="block text-sm font-medium text-gray-300 mb-1">Additional Channel(s) (comma separated)</label>
+                <input type="text" id="channels" placeholder="e.g., BNN Bloomberg" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="mb-4">
+                <label for="themePacks" class="block text-sm font-medium text-gray-300 mb-1">Additional Theme Pack(s) (comma separated)</label>
+                <input type="text" id="themePacks" placeholder="e.g., Mega South Asian Mix" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
         </div>
-        <div class="mb-4">
-            <label for="themePacks" class="block text-sm font-medium text-gray-300 mb-1">Additional Theme Pack(s) (comma separated)</label>
-            <input type="text" id="themePacks" placeholder="e.g., Mega South Asian Mix" class="w-full p-3 rounded-lg bg-gray-600 border border-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+        <!-- Buttons - Increased padding for better touch targets -->
+        <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
+            <button id="generateBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full sm:w-auto">Generate Message</button>
+            <button id="copyBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 w-full sm:w-auto mt-2 sm:mt-0">Copy to Clipboard</button>
         </div>
-    </div>
 
-    <!-- Buttons - Increased padding for better touch targets -->
-    <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-        <button id="generateBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full sm:w-auto">Generate Message</button>
-        <button id="copyBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 w-full sm:w-auto mt-2 sm:mt-0">Copy to Clipboard</button>
-    </div>
+        <!-- Output Textarea -->
+        <div class="mb-4">
+            <label for="messageOutput" class="block text-sm font-medium text-gray-300 mb-1">Generated Message</label>
+            <textarea id="messageOutput" rows="20" class="w-full p-4 rounded-lg bg-gray-700 border border-gray-500 text-white resize-none focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Your generated message will appear here..."></textarea>
+        </div>
 
-    <!-- Output Textarea -->
-    <div class="mb-4">
-        <label for="messageOutput" class="block text-sm font-medium text-gray-300 mb-1">Generated Message</label>
-        <textarea id="messageOutput" rows="20" class="w-full p-4 rounded-lg bg-gray-700 border border-gray-500 text-white resize-none focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Your generated message will appear here..."></textarea>
-    </div>
-
-    <!-- Notification Message -->
-    <div id="notification" class="hidden text-center text-sm mt-4 p-2 rounded-lg bg-green-500 text-white transition-opacity duration-300">
-        Message copied to clipboard!
+        <!-- Notification Message -->
+        <div id="notification" class="hidden text-center text-sm mt-4 p-2 rounded-lg bg-green-500 text-white transition-opacity duration-300">
+            Message copied to clipboard!
+        </div>
     </div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const generateBtn = document.getElementById('generateBtn');
-        const copyBtn = document.getElementById('copyBtn');
         const messageOutput = document.getElementById('messageOutput');
         const notification = document.getElementById('notification');
+
+        // --- Passcode Logic ---
+        const CORRECT_PASSCODE = "unnuisthebest";
+        const STORAGE_KEY = "rogers_generator_access_granted";
+        
+        const passcodeOverlay = document.getElementById('passcodeOverlay');
+        const mainContent = document.getElementById('mainContent');
+        const passcodeInput = document.getElementById('passcodeInput');
+        const passcodeSubmit = document.getElementById('passcodeSubmit');
+        const passcodeError = document.getElementById('passcodeError');
+
+        function checkAccess() {
+            const accessGranted = localStorage.getItem(STORAGE_KEY) === 'true';
+            
+            if (accessGranted) {
+                // If access is granted, hide the overlay and show content
+                passcodeOverlay.style.display = 'none';
+                mainContent.classList.remove('opacity-0');
+                mainContent.classList.add('opacity-100');
+                generateMessage(); // Initialize content
+            } else {
+                // Otherwise, ensure overlay is visible and content is hidden
+                passcodeOverlay.style.display = 'flex';
+                mainContent.classList.add('opacity-0');
+                mainContent.classList.remove('opacity-100');
+            }
+        }
+
+        function handlePasscodeSubmit() {
+            const enteredPasscode = passcodeInput.value.trim();
+            if (enteredPasscode === CORRECT_PASSCODE) {
+                localStorage.setItem(STORAGE_KEY, 'true');
+                passcodeError.classList.add('hidden');
+                
+                // Animate fade-out and display change
+                passcodeOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    passcodeOverlay.style.display = 'none';
+                    mainContent.classList.remove('opacity-0');
+                    mainContent.classList.add('opacity-100');
+                    generateMessage();
+                }, 500);
+
+            } else {
+                passcodeError.classList.remove('hidden');
+                passcodeInput.value = ''; // Clear input on failure
+            }
+        }
+
+        passcodeSubmit.addEventListener('click', handlePasscodeSubmit);
+        passcodeInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handlePasscodeSubmit();
+            }
+        });
+
+        // Initial check on load
+        checkAccess();
+        // --- End Passcode Logic ---
+
+
+        // --- Message Generator Logic (Original Code with Fixes) ---
+        const generateBtn = document.getElementById('generateBtn');
+        const copyBtn = document.getElementById('copyBtn');
 
         generateBtn.addEventListener('click', generateMessage);
         copyBtn.addEventListener('click', copyMessage);
@@ -403,27 +483,51 @@ Warm regards,
 ${yourName}
 Your Rogers Account Specialist`;
 
-            messageOutput.value = message;
+            messageOutput.value = message.trim();
         }
 
         function copyMessage() {
-            // Use modern clipboard API if available, with execCommand as fallback for better iOS compatibility
+            // Ensure the message is generated before attempting to copy
+            if (!messageOutput.value) {
+                showNotification('Please generate the message first!', 'bg-red-500');
+                return;
+            }
+
+            // 1. Use modern clipboard API (best for compatibility)
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(messageOutput.value).then(() => {
                     showNotification('Message copied to clipboard!', 'bg-green-500');
                 }).catch(err => {
-                    // Fallback for older browsers or restricted environments
-                    messageOutput.select();
-                    document.execCommand('copy');
-                    showNotification('Message copied to clipboard (Fallback)!', 'bg-yellow-500');
-                    console.error('Could not use navigator.clipboard', err);
+                    // Fallback attempt
+                    copyMessageFallback();
                 });
             } else {
-                messageOutput.select();
-                document.execCommand('copy');
-                showNotification('Message copied to clipboard!', 'bg-green-500');
+                // 2. Direct fallback for older browsers
+                copyMessageFallback();
             }
         }
+
+        // Separate function for the document.execCommand fallback to prevent selecting dropdowns (the core fix)
+        function copyMessageFallback() {
+            messageOutput.focus();
+            messageOutput.select();
+            
+            if (document.execCommand) {
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful) {
+                        showNotification('Message copied to clipboard!', 'bg-green-500');
+                    } else {
+                        showNotification('Copy failed. Please copy manually.', 'bg-red-500');
+                    }
+                } catch (err) {
+                    showNotification('Copy failed. Please copy manually.', 'bg-red-500');
+                }
+            } else {
+                showNotification('Copy function unavailable on this browser.', 'bg-red-500');
+            }
+        }
+
 
         function showNotification(message, colorClass) {
             notification.textContent = message;
@@ -434,8 +538,9 @@ Your Rogers Account Specialist`;
             }, 2000);
         }
 
-        // Initialize with default values on page load
-        generateMessage();
+        // Initialize content only after successful passcode check
+        // The checkAccess() call above handles the initialization.
+        // --- End Message Generator Logic ---
     });
 </script>
 
